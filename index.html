@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tarot Reader</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="container glass">
+        <header>
+            <h1>Bói tarot AI</h1>
+            <p>Bói chính xác (hoặc bịp) vận mệnh của bạn bằng AI</p>
+            <p>Code by Mtungg</p>
+        </header>
+
+        <div id="step-1" class="step-container">
+            <div class="input-group">
+                <input type="text" id="user-topic" placeholder="Bạn đang băn khoăn về điều gì? (Tình yêu, sự nghiệp...)" autocomplete="off">
+                <button id="start-btn" class="glass-btn">Bắt đầu trải bài</button>
+            </div>
+        </div>
+
+        <div id="step-2" class="step-container hidden">
+            <p>Hãy tập trung vào câu hỏi và chọn <strong>3</strong> lá bài:</p>
+            <div class="cards-grid" id="cards-container">
+                </div>
+        </div>
+
+        <div id="step-loading" class="step-container hidden">
+            <div class="crystal-ball">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <p>Đợi xíu đang hỏi AI...</p>
+        </div>
+
+        <div id="step-3" class="step-container hidden">
+            <div id="selected-cards-display" class="selected-display"></div>
+            <div class="reading-content glass">
+                <h3>Lời giải:</h3>
+                <div id="ai-response"></div>
+            </div>
+            <button onclick="location.reload()" class="glass-btn restart-btn">Bói quẻ khác</button>
+        </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
