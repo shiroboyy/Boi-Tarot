@@ -91,15 +91,41 @@ async function getReading() {
     });
 
     const prompt = `
-    Tôi muốn xem bói Tarot về chủ đề: "${userTopic}".
-    Tôi đã bốc được 3 lá bài:
-    1. ${selectedCards[0].name} – Quá khứ
-    2. ${selectedCards[1].name} – Hiện tại
-    3. ${selectedCards[2].name} – Tương lai
+    Đóng vai là một Master Tarot Reader với 20 năm kinh nghiệm, có khả năng thấu cảm sâu sắc và trực giác mạnh mẽ.
+    
+    Thông tin khách hàng:
+    - Chủ đề muốn xem: "${userTopic}"
+    - Các lá bài đã bốc:
+      1. Quá khứ: ${selectedCards[0].name}
+      2. Hiện tại: ${selectedCards[1].name}
+      3. Tương lai: ${selectedCards[2].name}
 
-    Hãy đóng vai một Tarot Reader chuyên nghiệp, giọng văn huyền bí, thấu cảm và tích cực. 
-    Giải thích ý nghĩa từng lá bài gắn với chủ đề và đưa ra lời khuyên tổng kết ngắn gọn. 
-    Dùng định dạng HTML cơ bản (như <p>, <strong>) để trình bày đẹp mắt.
+    Nhiệm vụ của bạn:
+    Hãy giải bài một cách huyền bí, nhẹ nhàng nhưng thực tế và đưa ra lời khuyên chữa lành (healing).
+    
+    Yêu cầu về định dạng (BẮT BUỘC TRẢ VỀ HTML):
+    Không được dùng Markdown (như ** hay ##), chỉ dùng thẻ HTML. Cấu trúc câu trả lời như sau:
+
+    <div class="reading-result">
+        <p><i>Xin chào, vũ trụ đã nghe thấy câu hỏi của bạn về chủ đề <strong>${userTopic}</strong>. Dưới đây là thông điệp dành riêng cho bạn:</i></p>
+        <hr>
+        
+        <h4>1. Quá khứ: ${selectedCards[0].name}</h4>
+        <p>[Giải thích ý nghĩa lá bài trong bối cảnh quá khứ, những gì đã hình thành nên tình huống này]</p>
+        
+        <h4>2. Hiện tại: ${selectedCards[1].name}</h4>
+        <p>[Giải thích năng lượng hiện tại, những thuận lợi hoặc thách thức đang đối mặt]</p>
+        
+        <h4>3. Tương lai: ${selectedCards[2].name}</h4>
+        <p>[Dự đoán xu hướng sắp tới nếu tiếp tục theo dòng năng lượng này]</p>
+        
+        <div class="advice-box" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px dashed #4fc3f7;">
+            <strong>🔮 Lời khuyên từ Vũ trụ:</strong>
+            <p>[Lời khuyên tổng kết ngắn gọn, tích cực và định hướng hành động cụ thể]</p>
+        </div>
+    </div>
+    
+    Hãy viết bằng tiếng Việt, giọng văn ấm áp, sâu sắc và truyền cảm hứng.
     `;
 
     try {
@@ -147,6 +173,7 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
