@@ -76,16 +76,14 @@ function selectCard(element, index) {
 async function getReading() {
     step2.classList.add('hidden');
     stepLoading.classList.remove('hidden');
-
     displayArea.innerHTML = "";
 
+    // Hiển thị bài đã chọn
     selectedCards.forEach(card => {
         const div = document.createElement('div');
         div.className = 'revealed-card glass';
         div.innerHTML = `
-            <div style="font-size: 2rem; color: #4fc3f7;">
-                <i class="fa-solid fa-sun"></i>
-            </div>
+            <div style="font-size: 2rem; color: #4fc3f7;"><i class="fa-solid fa-moon"></i></div>
             <div class="card-name">${card.name}</div>
             <small>${card.position}</small>
         `;
@@ -97,27 +95,19 @@ async function getReading() {
     Tôi đã bốc được 3 lá bài:
     1. ${selectedCards[0].name} – Quá khứ
     2. ${selectedCards[1].name} – Hiện tại
-    3. ${selectedCards[2].name} – Tương lai
-
-    Hãy đóng vai một Tarot Reader chuyên nghiệp, giọng văn huyền bí, thấu cảm và tích cực. 
-    Giải thích ý nghĩa từng lá bài gắn với chủ đề và đưa ra lời khuyên tổng kết ngắn gọn. 
-    Dùng định dạng HTML cơ bản (như <p>, <strong>) để trình bày đẹp mắt.
-    `;
+    3. ${selectedCards[2].name} – Tương lai.
+    Hãy giải thích ý nghĩa và đưa ra lời khuyên.`;
 
     try {
-        const workerUrl = "https://boitarot-api.shiroboyy.workers.dev";
-
-        if (workerUrl === "") {
-             console.warn("Bạn chưa thay link Cloudflare Worker!");
-        }
+        // --- GỌI API ---
+        const workerUrl = "https://boitarot-api.shiroboyy.workers.dev"; // Kiểm tra lại link này xem đúng chưa
 
         const response = await fetch(workerUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            // SỬA ĐOẠN NÀY (Cấu trúc messages thay vì contents)
             body: JSON.stringify({
                 messages: [
-                    { role: "system", content: "Bạn là một Tarot Reader huyền bí." },
+                    { role: "system", content: "Bạn là một Tarot Reader chuyên nghiệp." },
                     { role: "user", content: prompt }
                 ]
             })
@@ -125,22 +115,25 @@ async function getReading() {
 
         const data = await response.json();
 
-        console.log("Dữ liệu nhận được từ Worker:", data); 
+        // --- BẮT LỖI 400/500 TẠI ĐÂY ---
+        console.log("LOG TỪ SERVER:", data); // Bật F12 xem cái này
 
-        // 1. Kiểm tra xem Worker có báo lỗi không
+        // 1. Nếu Worker báo lỗi (ví dụ: Thiếu key, Sai model...)
         if (data.error) {
-            // Nếu Groq báo sai key, code sẽ nhảy vào đây
-            let msg = data.error.message || JSON.stringify(data.error);
-            throw new Error("Lỗi từ Groq/Worker: " + msg);
+            let msg = "";
+            if (typeof data.error === 'string') msg = data.error;
+            else if (data.error.message) msg = data.error.message;
+            else msg = JSON.stringify(data.error);
+            
+            throw new Error("LỖI TỪ SERVER: " + msg);
         }
 
+        // 2. Nếu dữ liệu trả về không đúng chuẩn Groq
         if (!data.choices || !data.choices[0]) {
-             if (data.candidates) {
-                 throw new Error("Lỗi: Worker chưa cập nhật code mới (Vẫn đang chạy Gemini). Hãy Deploy lại!");
-             }
-             throw new Error("Dữ liệu trả về không có kết quả: " + JSON.stringify(data));
+            throw new Error("Server không trả về kết quả bói. Kiểm tra lại Code Worker!");
         }
 
+        // --- NẾU THÀNH CÔNG ---
         const content = data.choices[0].message.content;
 
         stepLoading.classList.add('hidden');
@@ -149,11 +142,14 @@ async function getReading() {
 
     } catch (error) {
         console.error(error);
-        alert(error.message); 
+        // Hiện lỗi ra màn hình cho bạn đọc
+        alert("⚠️ CÓ LỖI XẢY RA:\n" + error.message);
+        
         stepLoading.classList.add('hidden');
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
