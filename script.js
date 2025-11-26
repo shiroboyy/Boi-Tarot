@@ -125,7 +125,24 @@ async function getReading() {
 
         const data = await response.json();
 
-        // SỬA ĐOẠN NÀY (Cách lấy dữ liệu trả về)
+        console.log("Dữ liệu nhận được:", data); // Bật F12 Console để xem chi tiết
+
+        // 1. Kiểm tra nếu có lỗi báo về từ Worker
+        if (data.error) {
+            let errorMsg = data.error.message || JSON.stringify(data.error);
+            throw new Error("Lỗi Worker: " + errorMsg);
+        }
+
+        // 2. Kiểm tra nếu dữ liệu không đúng định dạng Groq (Không có choices)
+        if (!data.choices || !data.choices[0]) {
+             // Nếu nó trả về 'candidates' -> Nghĩa là Worker vẫn đang dùng code Gemini cũ
+             if (data.candidates) {
+                 throw new Error("Lỗi phiên bản: Worker vẫn đang chạy code Gemini cũ. Hãy Deploy lại code Groq!");
+             }
+             throw new Error("Dữ liệu trả về bị lỗi (xem Console F12): " + JSON.stringify(data));
+        }
+
+        // Lấy nội dung
         const content = data.choices[0].message.content;
 
         stepLoading.classList.add('hidden');
@@ -134,11 +151,12 @@ async function getReading() {
 
     } catch (error) {
         console.error(error);
-        alert("Có lỗi kết nối: " + error.message);
+        alert(error.message); 
         stepLoading.classList.add('hidden');
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
