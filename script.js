@@ -113,24 +113,20 @@ async function getReading() {
 
         const response = await fetch(workerUrl, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-
+            headers: { 'Content-Type': 'application/json' },
+            // SỬA ĐOẠN NÀY (Cấu trúc messages thay vì contents)
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
+                messages: [
+                    { role: "system", content: "Bạn là một Tarot Reader huyền bí." },
+                    { role: "user", content: prompt }
+                ]
             })
         });
 
         const data = await response.json();
 
-        if (data.error) {
-            throw new Error(data.error.message || "Lỗi từ Worker");
-        }
-
-        const content = data.candidates[0].content.parts[0].text;
+        // SỬA ĐOẠN NÀY (Cách lấy dữ liệu trả về)
+        const content = data.choices[0].message.content;
 
         stepLoading.classList.add('hidden');
         step3.classList.remove('hidden');
@@ -143,6 +139,7 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
