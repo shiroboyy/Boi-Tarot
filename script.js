@@ -105,19 +105,18 @@ async function getReading() {
     `;
 
     try {
-        const apiKey = "AIzaSyBpREN8Hdpq09st_Mgyjs772UbqSR8A8zY";
-        
-        if (!apiKey) {
-            throw new Error("Chưa nhập API Key Gemini");
+        const workerUrl = "https://shiroboyy.github.io/Boi-Tarot/"; 
+
+        if (workerUrl === "https://tarot-proxy.ten-ban.workers.dev") {
+             console.warn("Bạn chưa thay link Cloudflare Worker!");
         }
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-        const response = await fetch(url, {
+        const response = await fetch(workerUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+
             body: JSON.stringify({
                 contents: [{
                     parts: [{ text: prompt }]
@@ -128,7 +127,7 @@ async function getReading() {
         const data = await response.json();
 
         if (data.error) {
-            throw new Error(data.error.message);
+            throw new Error(data.error.message || "Lỗi từ Worker");
         }
 
         const content = data.candidates[0].content.parts[0].text;
@@ -139,7 +138,7 @@ async function getReading() {
 
     } catch (error) {
         console.error(error);
-        alert("Có lỗi khi kết nối với Gemini AI: " + error.message);
+        alert("Có lỗi kết nối: " + error.message);
         stepLoading.classList.add('hidden');
         step1.classList.remove('hidden');
     }
