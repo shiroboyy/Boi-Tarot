@@ -1,6 +1,6 @@
 // --- CẤU HÌNH ---
 // Link Cloudflare Worker của bạn (Đã sửa đúng https)
-const workerUrl = "[https://boitarot-api.shiroboyy.workers.dev](https://boitarot-api.shiroboyy.workers.dev)";
+const workerUrl = "https://boitarot-api.shiroboyy.workers.dev";
 
 const tarotDeck = [
     "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor",
@@ -199,3 +199,4 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
