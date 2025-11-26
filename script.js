@@ -105,7 +105,7 @@ async function getReading() {
     `;
 
     try {
-        const workerUrl = "boitarot-api.shiroboyy.workers.dev"; 
+        const workerUrl = "https://boitarot-api.shiroboyy.workers.dev/"; 
 
         if (workerUrl === "https://tarot-proxy.ten-ban.workers.dev") {
              console.warn("Bạn chưa thay link Cloudflare Worker!");
@@ -143,4 +143,5 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
 
