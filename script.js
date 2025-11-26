@@ -78,7 +78,7 @@ async function getReading() {
     stepLoading.classList.remove('hidden');
     displayArea.innerHTML = "";
 
-    // Hiển thị bài đã chọn
+    // Hiển thị 3 lá bài
     selectedCards.forEach(card => {
         const div = document.createElement('div');
         div.className = 'revealed-card glass';
@@ -99,15 +99,14 @@ async function getReading() {
     Hãy giải thích ý nghĩa và đưa ra lời khuyên.`;
 
     try {
-        // --- GỌI API ---
-        const workerUrl = "https://boitarot-api.shiroboyy.workers.dev"; // Kiểm tra lại link này xem đúng chưa
+        const workerUrl = "https://boitarot-api.shiroboyy.workers.dev"; // Kiểm tra lại link này
 
         const response = await fetch(workerUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: [
-                    { role: "system", content: "Bạn là một Tarot Reader chuyên nghiệp." },
+                    { role: "system", content: "Bạn là một Tarot Reader huyền bí." },
                     { role: "user", content: prompt }
                 ]
             })
@@ -115,25 +114,22 @@ async function getReading() {
 
         const data = await response.json();
 
-        // --- BẮT LỖI 400/500 TẠI ĐÂY ---
-        console.log("LOG TỪ SERVER:", data); // Bật F12 xem cái này
+        // --- ĐOẠN DEBUG QUAN TRỌNG ---
+        console.log("LOG TỪ SERVER:", data); 
 
-        // 1. Nếu Worker báo lỗi (ví dụ: Thiếu key, Sai model...)
+        // 1. Kiểm tra lỗi từ Worker
         if (data.error) {
-            let msg = "";
-            if (typeof data.error === 'string') msg = data.error;
-            else if (data.error.message) msg = data.error.message;
-            else msg = JSON.stringify(data.error);
-            
-            throw new Error("LỖI TỪ SERVER: " + msg);
+            let msg = data.error.message || JSON.stringify(data.error);
+            throw new Error("Lỗi Server: " + msg);
         }
 
-        // 2. Nếu dữ liệu trả về không đúng chuẩn Groq
+        // 2. Kiểm tra format dữ liệu
         if (!data.choices || !data.choices[0]) {
-            throw new Error("Server không trả về kết quả bói. Kiểm tra lại Code Worker!");
+            if (data.candidates) throw new Error("Lỗi: Worker vẫn đang dùng code cũ (Gemini). Hãy Deploy lại code Groq!");
+            throw new Error("Server trả về dữ liệu rỗng!");
         }
 
-        // --- NẾU THÀNH CÔNG ---
+        // Lấy nội dung
         const content = data.choices[0].message.content;
 
         stepLoading.classList.add('hidden');
@@ -142,13 +138,12 @@ async function getReading() {
 
     } catch (error) {
         console.error(error);
-        // Hiện lỗi ra màn hình cho bạn đọc
-        alert("⚠️ CÓ LỖI XẢY RA:\n" + error.message);
-        
+        alert("⚠️ CÓ LỖI: " + error.message); // Hiện thông báo lỗi lên màn hình
         stepLoading.classList.add('hidden');
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
