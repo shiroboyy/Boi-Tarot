@@ -13,7 +13,6 @@ let shuffledDeck = [];
 let selectedCards = [];
 let userTopic = "";
 
-// Lấy các element từ HTML
 const step1 = document.getElementById('step-1');
 const step2 = document.getElementById('step-2');
 const stepLoading = document.getElementById('step-loading');
@@ -22,7 +21,6 @@ const cardsContainer = document.getElementById('cards-container');
 const displayArea = document.getElementById('selected-cards-display');
 const aiResponse = document.getElementById('ai-response');
 
-// Hàm xáo trộn bài
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -32,7 +30,6 @@ function shuffleArray(array) {
     return newArray;
 }
 
-// Bắt sự kiện nút Bắt đầu
 document.getElementById('start-btn').addEventListener('click', () => {
     userTopic = document.getElementById('user-topic').value.trim();
 
@@ -41,12 +38,10 @@ document.getElementById('start-btn').addEventListener('click', () => {
         return;
     }
 
-    // Reset lại game
     selectedCards = [];
     shuffledDeck = shuffleArray(tarotDeck);
     cardsContainer.innerHTML = "";
 
-    // Chuyển bước
     step1.classList.add('hidden');
     step2.classList.remove('hidden');
     step3.classList.add('hidden');
@@ -54,26 +49,16 @@ document.getElementById('start-btn').addEventListener('click', () => {
     renderDeck();
 });
 
-// ✅ FIX 2: Hàm hiển thị bài an toàn hơn
 function renderDeck() {
     for (let i = 0; i < 22; i++) {
         const card = document.createElement('div');
         card.classList.add('tarot-card');
         card.dataset.index = i;
-        
-        // Hiệu ứng hiện lần lượt
-        // Lưu ý: Nếu style.css chưa có @keyframes fadeIn thì bài vẫn sẽ hiện ra nhờ opacity = 1
-        card.style.animation = `fadeIn 0.5s ease ${i * 0.05}s forwards`;
-        
-        // Mẹo: Không set opacity = '0' ở đây để tránh lỗi mất hình nếu CSS hỏng.
-        // Thay vào đó, để CSS xử lý việc ẩn hiện.
-        
         card.addEventListener('click', () => selectCard(card, i));
         cardsContainer.appendChild(card);
     }
 }
 
-// Hàm chọn bài
 function selectCard(element, index) {
     if (selectedCards.length >= 3 || element.classList.contains('selected')) return;
 
@@ -87,7 +72,6 @@ function selectCard(element, index) {
         position: positions[selectedCards.length]
     });
 
-    // Nếu đủ 3 lá thì gọi API
     if (selectedCards.length === 3) {
         setTimeout(getReading, 800);
     }
@@ -201,3 +185,4 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
