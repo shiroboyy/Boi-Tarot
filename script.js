@@ -95,8 +95,12 @@ async function getReading() {
     Tôi đã bốc được 3 lá bài:
     1. ${selectedCards[0].name} – Quá khứ
     2. ${selectedCards[1].name} – Hiện tại
-    3. ${selectedCards[2].name} – Tương lai.
-    Hãy giải thích ý nghĩa và đưa ra lời khuyên.`;
+    3. ${selectedCards[2].name} – Tương lai
+
+    Hãy đóng vai một Tarot Reader chuyên nghiệp, giọng văn huyền bí, thấu cảm và tích cực. 
+    Giải thích ý nghĩa từng lá bài gắn với chủ đề và đưa ra lời khuyên tổng kết ngắn gọn. 
+    Dùng định dạng HTML cơ bản (như <p>, <strong>) để trình bày đẹp mắt.
+    `;
 
     try {
         const workerUrl = "https://boitarot-api.shiroboyy.workers.dev"; // Kiểm tra lại link này
@@ -143,6 +147,7 @@ async function getReading() {
         step1.classList.remove('hidden');
     }
 }
+
 
 
 
